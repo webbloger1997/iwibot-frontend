@@ -1,0 +1,16 @@
+<div id="themeWrapper" [class.darkTheme]="this.themeManager.isDarkTheme">
+<app-toolbar></app-toolbar>
+  <mat-sidenav-container>
+    <!--
+    <mat-sidenav mode="side" [opened]="!this.getIsSmallScreen()" position="start">
+      <app-tree-view></app-tree-view>
+    </mat-sidenav>
+    -->
+    <mat-sidenav mode="side" [opened]="!this.getIsSmallScreen()" position="end">
+      <app-bulletinboard></app-bulletinboard>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <app-chat></app-chat>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

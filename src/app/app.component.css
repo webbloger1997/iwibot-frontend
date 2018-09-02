@@ -1,0 +1,24 @@
+mat-sidenav-container {
+  height: 100%;
+}
+#themeWrapper {
+  height: calc(100% - 64px);
+}
+@media (max-width: 599px) {
+  #themeWrapper {
+    height: calc(100% - 54px);
+  }
+}
+mat-sidenav {
+  width: 405px;
+}
+::-webkit-scrollbar {
+  width: 4px;  /* remove scrollbar space */
+  background: transparent;  /* optional: just make scrollbar invisible */
+}
+::-webkit-scrollbar-thumb {
+  background: #DDDDDD;
+  height: 30px;
+  margin-left: 5px;
+  border-radius: 15px;
+}
