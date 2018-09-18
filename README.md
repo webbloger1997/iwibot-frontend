@@ -1,12 +1,20 @@
-# IWIBot - Frontend
+# IWIBot - Front-End
 
 ## Getting your environment set up  
-1. You need to [install](https://nodejs.org/en/download/package-manager/) a nodejs runtime and the node package manager (npm) for your OS.
-2. Then Install the [Angular CLI](https://github.com/angular/angular-cli) globally `npm install -g @angular/cli`
-3. If you haven't got git.. [go get it](https://git-scm.com/downloads). Then clone the Github project with `git clone https://github.com/HSKA-IWI-VSYS/IWIbot.git --branch=classifier_new` 
-4. Navigate to the frontend folder inside the project
+1. Make sure you have installed a Node.js runtime and the node package manager (npm) for your OS. You can get it from 
+[here](https://nodejs.org/en/download/package-manager/).
+2. Install the [Angular CLI](https://github.com/angular/angular-cli) globally `npm install -g @angular/cli`
+3. If you haven't got git... [go get it](https://git-scm.com/downloads). Then clone the Github project with `git clone https://github.com/HSKA-IWI-VSYS/iwibot-frontend` 
+4. Navigate to root directory of the project
 5. Run `npm install` to install the dependencies  
 6. Run `ng serve` for a dev server. Navigate to `http://localhost:4200/` in a Chrome Web-Browser! The app will automatically reload if you change any of the source files.
+
+## Deploying the Front-End to GitHub Pages
+
+We use [angular-cli-ghpages](https://github.com/angular-schule/angular-cli-ghpages) to deploy the project to GitHub Pages.
+
+1. Run `ng build --prod --base-href "https://<user-name>.github.io/<repo>/"
+2. Run `ngh` to the deploy the build to GitHub Pages
 
 ## Code scaffolding
 
