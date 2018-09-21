@@ -1,10 +1,11 @@
 # IWIBot - Front-End
 
 ## Getting your environment set up  
-1. Make sure you have installed a Node.js runtime and the node package manager (npm) for your OS. You can get it from 
-[here](https://nodejs.org/en/download/).
+1. Make sure you have installed a Node.js runtime and the node package manager (npm) for your OS.  
+You can get it from [here](https://nodejs.org/en/download/).
 2. Install the [Angular CLI](https://github.com/angular/angular-cli) globally `npm install -g @angular/cli`
-3. If you haven't got git... [go get it](https://git-scm.com/downloads). Then clone the Github project with `git clone https://github.com/HSKA-IWI-VSYS/iwibot-frontend` 
+3. If you haven't got git... [go get it](https://git-scm.com/downloads). 
+Then clone the Github project with `git clone https://github.com/HSKA-IWI-VSYS/iwibot-frontend`.
 4. Navigate to root directory of the project
 5. Run `npm install` to install the dependencies  
 6. Run `ng serve` for a dev server. Navigate to `http://localhost:4200/` in a Chrome Web-Browser! The app will automatically reload if you change any of the source files.
