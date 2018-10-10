@@ -16,7 +16,7 @@ export class ThemeManagerService {
    * Toggle between themes
    * @returns void
    */
-  changeTheme() {
+  toggleTheme() {
     this.isDarkTheme = !this.isDarkTheme;
   }
 

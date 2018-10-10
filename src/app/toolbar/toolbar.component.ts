@@ -24,8 +24,8 @@ export class ToolbarComponent implements OnInit {
   /**
    * Toggle theme
    */
-  changeTheme() {
-    this.themeManager.changeTheme();
+  toggleTheme() {
+    this.themeManager.toggleTheme();
   }
 
   /**
