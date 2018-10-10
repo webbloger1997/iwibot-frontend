@@ -14,7 +14,7 @@ Then clone the Github project with `git clone https://github.com/HSKA-IWI-VSYS/i
 
 We use [angular-cli-ghpages](https://github.com/angular-schule/angular-cli-ghpages) to deploy the project to GitHub Pages.
 
-1. Run `ng build --prod --base-href "https://<user-name>.github.io/<repo>/"
+1. Run `ng build --prod --base-href "https://user-name.github.io/repo/"
 2. Run `ngh` to the deploy the build to GitHub Pages
 
 ## Code scaffolding
