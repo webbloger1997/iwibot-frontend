@@ -49,11 +49,11 @@ export class ConversationService {
    */
   public sendMessage(message: string) {
     const sendMessage = new Message(message, true);
-    this.addNewMessageToConversation(sendMessage);
+    this.addMessageToConversation(sendMessage);
 
     const request: ConversationRequestObject = this.createConversationRequestObject(message);
     this.sendMessageToConversationService(request).subscribe((response: ConversationResponseObject) => {
-      this.processResponse(response);
+      this.processConversationResponse(response);
     });
   }
 
@@ -82,7 +82,7 @@ export class ConversationService {
    * to the conversation.
    * @param (conversationResponseObject) conversationResponseObject
    */
-  private processResponse(conversationResponseObject: ConversationResponseObject): void {
+  private processConversationResponse(conversationResponseObject: ConversationResponseObject): void {
     const responseMessage = new Message(
                             conversationResponseObject.payload,
                             false,
@@ -90,7 +90,7 @@ export class ConversationService {
                             conversationResponseObject.language
                             );
     this.conversation.setContext(conversationResponseObject.context);
-    this.addNewMessageToConversation(responseMessage);
+    this.addMessageToConversation(responseMessage);
   }
 
   /**
@@ -106,7 +106,7 @@ export class ConversationService {
    * Adds a message to the conversation and emits the message under the newMessageSubject
    * @param {Message} message   the message that gets added to the conversation
    */
-  private addNewMessageToConversation(message: Message): void {
+  private addMessageToConversation(message: Message): void {
     this.conversation.addMessage(message);
     this.newMessagesSubject.next(message);
   }
