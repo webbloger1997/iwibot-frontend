@@ -6,6 +6,7 @@ import { Message } from '../models/message';
 import { LoginService } from './login.service';
 import { ConversationResponseObject } from '../models/conversation-response-object';
 import {ConfigService} from './config.service';
+import { ConversationRequestObject } from '../models/conversation-request-object';
 
 @Injectable()
 export class ConversationService {
@@ -32,9 +33,9 @@ export class ConversationService {
   private initConversation(): void {
     const initObject: any = {};
     initObject.conInit = true;
-    this.getResponse(initObject)
+    this.sendMessageToConversationService(initObject)
       .subscribe(
-        response => {
+        (response: ConversationResponseObject) => {
           const message = new Message(response.payload, false);
           this.conversation.addMessage(message);
           this.conversation.setContext(response.context);
@@ -50,8 +51,8 @@ export class ConversationService {
     const sendMessage = new Message(message, true);
     this.addNewMessageToConversation(sendMessage);
 
-    const request = this.createRequest(message);
-    this.getResponse(request).subscribe(response => {
+    const request: ConversationRequestObject = this.createConversationRequestObject(message);
+    this.sendMessageToConversationService(request).subscribe((response: ConversationResponseObject) => {
       this.processResponse(response);
     });
   }
@@ -61,11 +62,12 @@ export class ConversationService {
    * @params (string) message  the message that gets send with the request
    * @returns {any}
    */
-  private createRequest(message: string) {
-    const requestObject: any = {};
-    requestObject.context = this.conversation.getContext();
+  private createConversationRequestObject(message: string): ConversationRequestObject {
+    const requestObject: ConversationRequestObject = {
+        payload : message,
+        context : this.conversation.getContext()
+    };
     requestObject.context.iwibotCreds = this.loginService.getCookie('iwibot-creds');
-    requestObject.payload = message;
     if (this.getConversation().getUserInformation()) {
       requestObject.semester = this.conversation.getUserInformation().getSemester();
       requestObject.courseOfStudies = this.conversation.getUserInformation().getCourseOfStudies();
@@ -96,7 +98,7 @@ export class ConversationService {
    * @param {Object} requestObject
    * @returns {Observable<ConversationResponseObject>}
    */
-  private getResponse(requestObject: Object): Observable<ConversationResponseObject> {
+  private sendMessageToConversationService(requestObject: Object): Observable<ConversationResponseObject> {
     return this.http.post<ConversationResponseObject>(this.CONVERSATION_API_URL, requestObject);
   }
 
