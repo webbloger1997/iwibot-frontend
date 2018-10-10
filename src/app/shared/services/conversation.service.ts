@@ -10,14 +10,13 @@ import {ConfigService} from './config.service';
 @Injectable()
 export class ConversationService {
 
-  private CONVERSATION_API_URL = this.configService.getApiEndpoint('CONVERSATION_API_URL');
+  private CONVERSATION_API_URL = ConfigService.getApiEndpoint('CONVERSATION_API_URL');
   private readonly newMessagesSubject: Subject<Message>;
 
   constructor(
     private http: HttpClient,
     private conversation: Conversation,
     private loginService: LoginService,
-    private configService: ConfigService
   ) {
     this.newMessagesSubject = new Subject();
     this.initConversation();

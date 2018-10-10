@@ -7,9 +7,9 @@ import {ConfigService} from './config.service';
 })
 export class NewsbulletinboardService {
 
-  bulletinBoardNewsUrl = this.configService.getApiEndpoint('BULLETIN_BOARD_NEWS_URL');
+  bulletinBoardNewsUrl = ConfigService.getApiEndpoint('BULLETIN_BOARD_NEWS_URL');
 
-  constructor(private http: HttpClient, private configService: ConfigService) { }
+  constructor(private http: HttpClient) { }
 
   /**
    *  Returns an array of news from the bulletin board.

@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 })
 export class ConfigService {
 
-  public getApiEndpoint(endpointName: string) {
+  public static getApiEndpoint(endpointName: string) {
     return environment.apiEndpoints[endpointName];
   }
 }

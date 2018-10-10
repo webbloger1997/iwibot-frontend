@@ -7,10 +7,9 @@ import {ConfigService} from './config.service';
 })
 export class LoginService {
 
-  private hskaStudentInfoUrl = this.configService.getApiEndpoint('HSKA_STUDENT_INFO_URL');
+  private hskaStudentInfoUrl = ConfigService.getApiEndpoint('HSKA_STUDENT_INFO_URL');
 
-  constructor(private http: HttpClient,
-              private configService: ConfigService) { }
+  constructor(private http: HttpClient) { }
 
   public setCookie(cname: string, cvalue: string, exdays: number) {
       const d = new Date();
