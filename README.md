@@ -10,6 +10,17 @@ Then clone the Github project with `git clone https://github.com/HSKA-IWI-VSYS/i
 5. Run `npm install` to install the dependencies  
 6. Run `ng serve` for a dev server. Navigate to `http://localhost:4200/` in a Chrome Web-Browser! The app will automatically reload if you change any of the source files.
 
+## Environment configuration
+
+If you have deployed your own [iwibot-openwhisk](https://github.com/HSKA-IWI-VSYS/iwibot-openwhisk) Back-End and want to configure the Front-End to use your deployed Back-End:
+1. Navigate to `src/environments`
+2. Change `CONVERSATION_API_URL` in `environment.prod.ts` and `environment.ts`  to fit your conversation api url.
+
+Steps to find your `CONVERSATION_API_URL`
+1. Make sure you have deployed [iwibot-openwhisk](https://github.com/HSKA-IWI-VSYS/iwibot-openwhisk)
+2. Run `ibmcloud wsk api list` in your console
+3. Find the URL that ends with `/iwibot/router` and copy it
+ 
 ## Deploying the Front-End to GitHub Pages
 
 We use [angular-cli-ghpages](https://github.com/angular-schule/angular-cli-ghpages) to deploy the project to GitHub Pages.
