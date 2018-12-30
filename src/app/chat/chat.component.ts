@@ -168,4 +168,8 @@ export class ChatComponent implements OnInit {
   private detectChanges(): void {
     this.changeDetector.detectChanges();
   }
+
+  public deleteHistory(): void {
+    this.conversationService.deleteHistory();
+  }
 }

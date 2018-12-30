@@ -13,3 +13,22 @@
   margin-right: 25px;
 }
 
+#deleteHistoryDark {
+  background-color: rgb(33, 33, 33);
+  cursor: pointer;
+  border: none;
+}
+
+#deleteHistory {
+  background-color: #bdbdbd;
+  cursor: pointer;
+  border: none;
+}
+
+#noConnectionMsg {
+  display: flex;
+  justify-content: center;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: #EF5350;
+  margin-left: 30px
+}

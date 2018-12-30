@@ -28,6 +28,8 @@ import { LoginService } from './shared/services/login.service';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ThemeManagerService } from './shared/services/theme-manager.service';
 import { BulletinboardComponent } from './bulletinboard/bulletinboard.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -56,7 +58,8 @@ import { BulletinboardComponent } from './bulletinboard/bulletinboard.component'
     MatSelectModule,
     MatSidenavModule,
     MatCardModule,
-    LayoutModule
+    LayoutModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     SpeechToTextService,

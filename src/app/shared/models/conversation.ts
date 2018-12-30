@@ -1,13 +1,14 @@
 import { Message } from './message';
 import { UserInformation } from './user-information';
 
-export class Conversation {
+export class Conversation{
 
   private context: Object;
-  private messages: Message[] = [];
+  private messages: Message[];
   private userInformation: UserInformation;
 
   constructor() {
+    this.messages = [];
   }
 
   public getMessages(): Message[] {
