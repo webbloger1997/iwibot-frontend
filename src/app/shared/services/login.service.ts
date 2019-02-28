@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {ConfigService} from './config.service';
+import { LibraryCredentials } from '../models/library-credentials';
+import { cryptoMod } from './key.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,8 +10,11 @@ import {ConfigService} from './config.service';
 export class LoginService {
 
   private hskaStudentInfoUrl = ConfigService.getApiEndpoint('HSKA_STUDENT_INFO_URL');
+  private libCredentials: LibraryCredentials;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.libCredentials = new LibraryCredentials();
+  }
 
   public setCookie(cname: string, cvalue: string, exdays: number) {
       const d = new Date();
@@ -48,4 +53,22 @@ export class LoginService {
     };
     return this.http.get(this.hskaStudentInfoUrl, httpOptions);
   }
+
+  public setLibCredentials(username: string, passowrd: string) {
+    this.libCredentials.name= username;
+    this.libCredentials.password = passowrd;
+  }
+
+  public libCredentialsAvailable(): boolean {
+    if(this.libCredentials.name) {
+      return true;
+    }
+    return false;
+  }
+
+  public getEncryptedLibCredentials(): any {
+    return cryptoMod.createEncryptedJsonMessage(JSON.stringify(this.libCredentials));
+  }
+
+ 
 }

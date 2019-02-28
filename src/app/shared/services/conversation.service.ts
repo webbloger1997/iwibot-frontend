@@ -84,9 +84,27 @@ export class ConversationService {
     this.addMessageToConversation(sendMessage);
 
     const request: ConversationRequestObject = this.createConversationRequestObject(message);
-    this.sendMessageToConversationService(request).subscribe((response: ConversationResponseObject) => {
-      this.processConversationResponse(response);
-    });
+    async function setLibCredentials(loginService: LoginService, request: ConversationRequestObject, 
+      conversationService: ConversationService) {
+      try {
+        if(loginService.libCredentialsAvailable()) {
+          console.log("Creds available");
+          await loginService.getEncryptedLibCredentials().then(msg => {
+            request.library_credentials = msg;
+            console.log("Cred_1: ", request.library_credentials);
+            //return requestObject;
+          });
+        }
+        conversationService.sendMessageToConversationService(request).subscribe((response: ConversationResponseObject) => {
+          conversationService.processConversationResponse(response);
+          console.log("Request", JSON.stringify(request));
+        });
+      }
+      catch(err) {
+          console.log('Error: ', err.message);
+      }
+    }
+    setLibCredentials(this.loginService, request, this);
   }
 
   /**
@@ -100,11 +118,14 @@ export class ConversationService {
         context : this.conversation.getContext()
     };
     requestObject.context.iwibotCreds = this.loginService.getCookie('iwibot-creds');
+
     if (this.getConversation().getUserInformation()) {
       requestObject.semester = this.conversation.getUserInformation().getSemester();
       requestObject.courseOfStudies = this.conversation.getUserInformation().getCourseOfStudies();
     }
+
     return requestObject;
+    
   }
 
   /**

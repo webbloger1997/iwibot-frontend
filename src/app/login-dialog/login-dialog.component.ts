@@ -17,6 +17,8 @@ export class LoginDialogComponent implements OnInit {
   semester = '1';
   errorOccurred = false;
   errorText: string;
+  lib_name: string;
+  lib_pw: string;
 
   constructor(
     public dialogRef: MatDialogRef<LoginDialogComponent>,
@@ -49,6 +51,9 @@ export class LoginDialogComponent implements OnInit {
         console.log(error);
       }
     );
+    if(this.lib_name) {
+      this.loginService.setLibCredentials(this.lib_name, this.lib_pw);
+    }
   }
 
   ngOnInit() {

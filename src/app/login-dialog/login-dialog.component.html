@@ -21,6 +21,14 @@
         <mat-option value="7">7. Semester</mat-option>
       </mat-select>
     </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>Bib-Name</mat-label>
+      <input [(ngModel)]="lib_name" name='lib_name' matInput>
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>Bib-Password</mat-label>
+      <input [(ngModel)]="lib_pw" name='lib_pw' type="password" matInput>
+    </mat-form-field>
   </form>
 </div>
 <div mat-dialog-actions>
