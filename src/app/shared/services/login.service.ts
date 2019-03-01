@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {ConfigService} from './config.service';
 import { LibraryCredentials } from '../models/library-credentials';
-import { cryptoMod } from './key.service';
+import { CryptoModule } from './key.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class LoginService {
   private hskaStudentInfoUrl = ConfigService.getApiEndpoint('HSKA_STUDENT_INFO_URL');
   private libCredentials: LibraryCredentials;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private cryptoMod: CryptoModule) {
     this.libCredentials = new LibraryCredentials();
   }
 
@@ -67,7 +67,7 @@ export class LoginService {
   }
 
   public getEncryptedLibCredentials(): any {
-    return cryptoMod.createEncryptedJsonMessage(JSON.stringify(this.libCredentials));
+    return this.cryptoMod.createEncryptedJsonMessage(JSON.stringify(this.libCredentials));
   }
 
  

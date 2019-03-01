@@ -1,14 +1,29 @@
-export let cryptoMod = (function () {
+import { Injectable } from "@angular/core";
+import { ConfigService } from "./config.service";
 
-    let secret_key = {}; // the AES secret key object
-    let session_identifier = ""; // session identifier associated with the secret key
+@Injectable({
+    providedIn: 'root'
+})
+export class CryptoModule {
 
-    if (!("TextEncoder" in window))
-        alert("Sorry, this browser does not support TextEncoder...");
+    private secret_key = {}; // the AES secret key object
+    session_identifier = ""; // session identifier associated with the secret key
+    private encoder = new TextEncoder(); // always utf-8
 
-    let encoder = new TextEncoder(); // always utf-8
+    constructor() { // call this function after the page has loaded
+        let key_service_api = ConfigService.getApiEndpoint('KEY_SERVICE_API');
+        if (!("TextEncoder" in window))
+            alert("Sorry, this browser does not support TextEncoder...");
+        console.log("WebCrypto init:", key_service_api);
+        // $.get("./secret.aes", cryptoMod.initCryptoKey); // use key from local sever instead of openwhisk action
+        $.get(
+            key_service_api,
+            (msg) => this.initCryptoKey(msg.payload.crypto_key, msg.payload.sid)
+        );
+        // $("#encrypt").on("click", () => demoPageMod.sendCryptoMsg());
+    }
 
-    function hex2buf(hex) { // hex is a hex string
+    private hex2buf(hex) { // hex is a hex string
         var view = new Uint8Array(hex.length / 2);
         for (var i = 0; i < hex.length; i += 2) {
             view[i / 2] = parseInt(hex.substring(i, i + 2), 16);
@@ -16,15 +31,15 @@ export let cryptoMod = (function () {
         return view.buffer;
     }
 
-    function buf2hex(buffer) { // buffer is an ArrayBuffer
+    static buf2hex(buffer) { // buffer is an ArrayBuffer
         return Array.prototype.map.call(
             new Uint8Array(buffer),
             x => ('00' + x.toString(16)).slice(-2)
         ).join('');
     }
 
-    function importSecretAesKey(keyData, session_id) {
-        session_identifier = session_id;
+    private importSecretAesKey(keyData, session_id) {
+        this.session_identifier = session_id;
         return window.crypto.subtle.importKey(
             "raw", //can be "jwk" or "raw"
             keyData, // "raw" would be an ArrayBuffer
@@ -34,71 +49,42 @@ export let cryptoMod = (function () {
         );
     }
 
-    function encryptPlaintextWithAes(data, aesKey) {
+    private encryptPlaintextWithAes(data, aesKey) {
         var ivec = window.crypto.getRandomValues(new Uint8Array(16));
         console.log("AES key: ", aesKey);
         return window.crypto.subtle.encrypt({
-                    name: "AES-CBC",
-                    //Don't re-use initialization vectors!
-                    //Always generate a new iv every time your encrypt!
-                    iv: ivec,
-                },
-                aesKey, //from generateKey or importKey above
-                data //ArrayBuffer of data you want to encrypt
-            )
-            .then(function (encrypted) {
-                console.log("encrypted: ", encrypted);
-                console.log("encrypted2: ", buf2hex(new Uint8Array(encrypted)));
-                return {
-                    "iv": buf2hex(ivec),
-                    "encrypted": buf2hex(new Uint8Array(encrypted)),
-                    "sid": session_identifier
-                };
-            });
+            name: "AES-CBC",
+            //Don't re-use initialization vectors!
+            //Always generate a new iv every time your encrypt!
+            iv: ivec,
+        },
+            aesKey, //from generateKey or importKey above
+            data //ArrayBuffer of data you want to encrypt
+        )
+        .then(encrypted => {
+            console.log("encrypted: ", encrypted);
+            console.log("encrypted2: ", CryptoModule.buf2hex(new Uint8Array(encrypted)));
+            console.log("Session_id in then:", this.session_identifier);
+            return {
+                "iv": CryptoModule.buf2hex(ivec),
+                "encrypted": CryptoModule.buf2hex(new Uint8Array(encrypted)),
+                "sid": this.session_identifier
+            };
+        });
     }
 
-    return { // public part of the module
+    public initCryptoKey(keyData, session_id) {
+        console.log("Setting session identifier to " + session_id);
+        console.log("Setting crypto key to " + keyData);
+        this.importSecretAesKey(this.hex2buf(keyData), session_id)
+            .then(key => this.secret_key = key);
+    }
 
-        initCryptoKey: function (keyData, session_id) {
-            console.log("Setting session identifier to " + session_id);
-            console.log("Setting crypto key to " + keyData);
-            importSecretAesKey(hex2buf(keyData), session_id)
-                .then(key => secret_key = key);
-        },
-
-        createEncryptedJsonMessage: function (plaintext) {
-            console.log("Plaintext: ", plaintext);
-            let data = encoder.encode(plaintext);
-            console.log("Data: ", data);
-            return encryptPlaintextWithAes(data, secret_key)
-                .then(msg => Promise.resolve(JSON.stringify(msg)));
-        }
-    };
-})();
-
-let demoPageMod = (function () {
-    return { // public part of the module
-        sendCryptoMsg: function () {
-            let plaintext = $("#plaintext").val();
-            cryptoMod.createEncryptedJsonMessage(plaintext)
-                .then(msgJson =>
-                    $.ajax({
-                        type: "POST",
-                        url: "/requests",
-                        data: msgJson,
-                        contentType: 'application/json; charset=UTF-8',
-                        success: msg => $("#answer").text(JSON.stringify(msg, null, '\t'))
-                    }));
-        }
-    };
-})();
-
-$(function () { // call this function after the page has loaded
-    console.log("WebCrypto init");
-    // $.get("./secret.aes", cryptoMod.initCryptoKey); // use key from local sever instead of openwhisk action
-    $.get(
-        "https://us-south.functions.cloud.ibm.com/api/v1/web/IWIbot_dev/IWIBot/Keys.json",
-        (msg) => cryptoMod.initCryptoKey(msg.payload.crypto_key, msg.payload.sid)
-    );
-    $("#encrypt").on("click", () => demoPageMod.sendCryptoMsg());
-});
+    public createEncryptedJsonMessage(plaintext) {
+        console.log("Plaintext: ", plaintext);
+        let data = this.encoder.encode(plaintext);
+        console.log("Data: ", data);
+        return this.encryptPlaintextWithAes(data, this.secret_key)
+            .then(msg => Promise.resolve(JSON.stringify(msg)));
+    }
+};
