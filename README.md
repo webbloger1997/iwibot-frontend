@@ -53,7 +53,7 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
 ## Progressive Web App
-See [Documentation PWA] (doku/pwa.md)
+See [Documentation](doku/pwa.md)
 
 ## Further help
 
