@@ -41,7 +41,27 @@ export class LoginDialogComponent implements OnInit {
         const conversation = this.conversationService.getConversation();
         const userInformation = new UserInformation(this.semester, data.student.courseOfStudies);
         conversation.setUserInformation(userInformation);
-        this.dialogRef.close();
+        if(this.lib_name) {
+          this.loginService.setLibCredentials(this.lib_name, this.lib_pw);
+
+          this.loginService.verifyLibraryCredentials(this.lib_name, this.lib_pw).subscribe(
+            (data: any) => {
+              console.log("Valid Creds :)");
+
+              this.dialogRef.close();
+            },
+            error => {
+              if (error.status === 401) {
+                this.errorOccurred = true;
+                this.errorText = 'Bibliotheks-Benutzername und/oder -Passwort falsch';
+              }
+              console.log(error);
+            }
+          );
+
+        } else {
+          this.dialogRef.close();
+        }
       },
       error => {
         if (error.status === 401) {
@@ -51,9 +71,11 @@ export class LoginDialogComponent implements OnInit {
         console.log(error);
       }
     );
-    if(this.lib_name) {
-      this.loginService.setLibCredentials(this.lib_name, this.lib_pw);
-    }
+
+    
+
+
+    
   }
 
   ngOnInit() {

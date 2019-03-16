@@ -10,6 +10,7 @@ import { CryptoModule } from './key.service';
 export class LoginService {
 
   private hskaStudentInfoUrl = ConfigService.getApiEndpoint('HSKA_STUDENT_INFO_URL');
+  private hskaLibBooksUrl = ConfigService.getApiEndpoint('HSKA_LIB_BORROWED_BOOKS_URL');
   private libCredentials: LibraryCredentials;
 
   constructor(private http: HttpClient, private cryptoMod: CryptoModule) {
@@ -52,6 +53,17 @@ export class LoginService {
       })
     };
     return this.http.get(this.hskaStudentInfoUrl, httpOptions);
+  }
+
+  public verifyLibraryCredentials(username: string, password: string) {
+    const token = btoa(username + ':' + password);
+    //this.setCookie('iwibot-creds', token, 365);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic ' + token
+      })
+    };
+    return this.http.get(this.hskaLibBooksUrl, httpOptions);
   }
 
   public setLibCredentials(username: string, passowrd: string) {

@@ -11,7 +11,7 @@ export class CryptoModule {
     private encoder = new TextEncoder(); // always utf-8
 
     constructor() { // call this function after the page has loaded
-        let key_service_api = ConfigService.getApiEndpoint('KEY_SERVICE_API');
+        let key_service_api = ConfigService.getApiEndpoint('KEY_SERVICE_URL');
         if (!("TextEncoder" in window))
             alert("Sorry, this browser does not support TextEncoder...");
         console.log("WebCrypto init:", key_service_api);
