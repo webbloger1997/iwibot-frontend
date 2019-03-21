@@ -17,7 +17,8 @@
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "assets": [
-              "src/assets"
+              "src/assets",
+              "src/manifest.json"
             ],
             "styles": [
               "src/theme.scss",
@@ -41,7 +42,8 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
-              ]
+              ],
+              "serviceWorker": true
             }
           }
         },
@@ -74,12 +76,12 @@
               "src/styles.css"
             ],
             "assets": [
+              "src/src/IWIBotFavIcon.png",
               "src/assets",
-              "src/src/IWIBotFavIcon.png"
+              "src/manifest.json"
             ]
           }
         },
-
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {

@@ -13,6 +13,7 @@ export class ConversationService {
 
   private CONVERSATION_API_URL = ConfigService.getApiEndpoint('CONVERSATION_API_URL');
   private readonly newMessagesSubject: Subject<Message>;
+  private key = "iwiBot_conversationMessages";
 
   constructor(
     private http: HttpClient,
@@ -33,14 +34,45 @@ export class ConversationService {
   private initConversation(): void {
     const initObject: any = {};
     initObject.conInit = true;
+    if(this.getConversationMessages().length == 0) {
+      this.initHistory();
+    }
     this.sendMessageToConversationService(initObject)
       .subscribe(
         (response: ConversationResponseObject) => {
           const message = new Message(response.payload, false);
-          this.conversation.addMessage(message);
+          //this.initHistory();
+          if(this.getConversationMessages().length == 0) {
+            this.conversation.addMessage(message);
+          }
           this.conversation.setContext(response.context);
         }
-      );
+      ); 
+  }
+
+  /**
+   * Looks if there are old messages in lokalStorage. 
+   * If yes add them to the current conversation.
+   */
+  private initHistory(): void {
+    if (window.localStorage) {
+      let stringMessages = localStorage.getItem(this.key);
+      if(stringMessages) {
+        try {
+          let messages = JSON.parse(stringMessages);
+          for(let message of messages) {
+            this.conversation.addMessage(new Message(
+              message.payload,
+              message.isSendMessage,
+              message.html,
+              message.lang
+              ))
+          }
+        } catch(err) {
+          localStorage.removeItem(this.key);
+        }
+      }
+    }
   }
 
   /**
@@ -108,6 +140,10 @@ export class ConversationService {
    */
   private addMessageToConversation(message: Message): void {
     this.conversation.addMessage(message);
+    if (window.localStorage) {
+      let messages = this.getConversationMessages();
+      localStorage.setItem(this.key, JSON.stringify(messages));
+    }
     this.newMessagesSubject.next(message);
   }
 
@@ -133,5 +169,14 @@ export class ConversationService {
    */
   public getNewMessageSubject(): Subject<Message> {
     return this.newMessagesSubject;
+  }
+
+  public deleteHistory(): void {
+    if (window.localStorage) {
+      localStorage.removeItem(this.key);
+    }
+    this.getConversationMessages().splice(1, 
+      this.getConversationMessages().length - 1);
+
   }
 }

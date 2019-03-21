@@ -9,7 +9,8 @@ export class NewsbulletinboardService {
 
   bulletinBoardNewsUrl = ConfigService.getApiEndpoint('BULLETIN_BOARD_NEWS_URL');
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+  }
 
   /**
    *  Returns an array of news from the bulletin board.

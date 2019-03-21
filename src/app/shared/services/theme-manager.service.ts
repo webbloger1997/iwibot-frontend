@@ -41,5 +41,9 @@ export class ThemeManagerService {
     }
   }
 
+  darkTheme(): boolean {
+    return this.isDarkTheme;
+  }
+
 }
 
