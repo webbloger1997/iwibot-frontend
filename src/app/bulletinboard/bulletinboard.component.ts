@@ -21,7 +21,6 @@ export class BulletinboardComponent implements OnInit {
         networkCheck.setOnline(true);
       },
       error => {
-        //console.log('No network connection', error);
         networkCheck.setOnline(false);
       }
       );

@@ -46,8 +46,6 @@ export class LoginDialogComponent implements OnInit {
 
           this.loginService.verifyLibraryCredentials(this.lib_name, this.lib_pw).subscribe(
             (data: any) => {
-              console.log("Valid Creds :)");
-
               this.dialogRef.close();
             },
             error => {
@@ -55,10 +53,8 @@ export class LoginDialogComponent implements OnInit {
                 this.errorOccurred = true;
                 this.errorText = 'Bibliotheks-Benutzername und/oder -Passwort falsch';
               }
-              console.log(error);
             }
           );
-
         } else {
           this.dialogRef.close();
         }
@@ -68,7 +64,6 @@ export class LoginDialogComponent implements OnInit {
           this.errorOccurred = true;
           this.errorText = 'Benutzername und/oder Passwort falsch';
         }
-        console.log(error);
       }
     );
 

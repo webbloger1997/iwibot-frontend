@@ -88,16 +88,13 @@ export class ConversationService {
       conversationService: ConversationService) {
       try {
         if(loginService.libCredentialsAvailable()) {
-          console.log("Creds available");
           await loginService.getEncryptedLibCredentials().then(msg => {
             request.library_credentials = msg;
-            console.log("Cred_1: ", request.library_credentials);
             //return requestObject;
           });
         }
         conversationService.sendMessageToConversationService(request).subscribe((response: ConversationResponseObject) => {
           conversationService.processConversationResponse(response);
-          console.log("Request", JSON.stringify(request));
         });
       }
       catch(err) {

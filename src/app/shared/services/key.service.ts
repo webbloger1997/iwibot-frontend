@@ -14,7 +14,6 @@ export class CryptoModule {
         let key_service_api = ConfigService.getApiEndpoint('KEY_SERVICE_URL');
         if (!("TextEncoder" in window))
             alert("Sorry, this browser does not support TextEncoder...");
-        console.log("WebCrypto init:", key_service_api);
         // $.get("./secret.aes", cryptoMod.initCryptoKey); // use key from local sever instead of openwhisk action
         $.get(
             key_service_api,
@@ -51,7 +50,6 @@ export class CryptoModule {
 
     private encryptPlaintextWithAes(data, aesKey) {
         var ivec = window.crypto.getRandomValues(new Uint8Array(16));
-        console.log("AES key: ", aesKey);
         return window.crypto.subtle.encrypt({
             name: "AES-CBC",
             //Don't re-use initialization vectors!
@@ -62,9 +60,6 @@ export class CryptoModule {
             data //ArrayBuffer of data you want to encrypt
         )
         .then(encrypted => {
-            console.log("encrypted: ", encrypted);
-            console.log("encrypted2: ", CryptoModule.buf2hex(new Uint8Array(encrypted)));
-            console.log("Session_id in then:", this.session_identifier);
             return {
                 "iv": CryptoModule.buf2hex(ivec),
                 "encrypted": CryptoModule.buf2hex(new Uint8Array(encrypted)),
@@ -74,16 +69,12 @@ export class CryptoModule {
     }
 
     public initCryptoKey(keyData, session_id) {
-        console.log("Setting session identifier to " + session_id);
-        console.log("Setting crypto key to " + keyData);
         this.importSecretAesKey(this.hex2buf(keyData), session_id)
             .then(key => this.secret_key = key);
     }
 
     public createEncryptedJsonMessage(plaintext) {
-        console.log("Plaintext: ", plaintext);
         let data = this.encoder.encode(plaintext);
-        console.log("Data: ", data);
         return this.encryptPlaintextWithAes(data, this.secret_key)
             .then(msg => Promise.resolve(JSON.stringify(msg)));
     }
