@@ -17,6 +17,8 @@ export class LoginDialogComponent implements OnInit {
   semester = '1';
   errorOccurred = false;
   errorText: string;
+  lib_name: string;
+  lib_pw: string;
 
   constructor(
     public dialogRef: MatDialogRef<LoginDialogComponent>,
@@ -39,16 +41,36 @@ export class LoginDialogComponent implements OnInit {
         const conversation = this.conversationService.getConversation();
         const userInformation = new UserInformation(this.semester, data.student.courseOfStudies);
         conversation.setUserInformation(userInformation);
-        this.dialogRef.close();
+        if(this.lib_name) {
+          this.loginService.setLibCredentials(this.lib_name, this.lib_pw);
+
+          this.loginService.verifyLibraryCredentials(this.lib_name, this.lib_pw).subscribe(
+            (data: any) => {
+              this.dialogRef.close();
+            },
+            error => {
+              if (error.status === 401) {
+                this.errorOccurred = true;
+                this.errorText = 'Bibliotheks-Benutzername und/oder -Passwort falsch';
+              }
+            }
+          );
+        } else {
+          this.dialogRef.close();
+        }
       },
       error => {
         if (error.status === 401) {
           this.errorOccurred = true;
           this.errorText = 'Benutzername und/oder Passwort falsch';
         }
-        console.log(error);
       }
     );
+
+    
+
+
+    
   }
 
   ngOnInit() {
