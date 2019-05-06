@@ -8,7 +8,7 @@
       "updateMode": "prefetch",
       "urls": [
         "https://hska-iwi-vsys.github.io/iwibot-frontend/index.html",
-        "https://hska-iwi-vsys.github.io/iwibot-frontend/main.69a080f6d637dae25070.js",
+        "https://hska-iwi-vsys.github.io/iwibot-frontend/main.9b6267e2f60a919cbabe.js",
         "https://hska-iwi-vsys.github.io/iwibot-frontend/polyfills.a19b2f1d90e9baecaab8.js",
         "https://hska-iwi-vsys.github.io/iwibot-frontend/runtime.a66f828dca56eeb90e02.js",
         "https://hska-iwi-vsys.github.io/iwibot-frontend/styles.7170448409e760270c38.css"
@@ -56,8 +56,8 @@
     "https://hska-iwi-vsys.github.io/iwibot-frontend/assets/icons/round-mic-24px.svg": "72484cd8c019018669415119c42b1bf4a559f8de",
     "https://hska-iwi-vsys.github.io/iwibot-frontend/assets/icons/round-send-24px.svg": "f629f398832cb183b98a24504278ccb234147c36",
     "https://hska-iwi-vsys.github.io/iwibot-frontend/assets/img/IWIBotFavIcon.png": "01d00099f37076b9a31c92a979def8df9a472a39",
-    "https://hska-iwi-vsys.github.io/iwibot-frontend/index.html": "9e4667d514cdcc58f5cbb9ef6f1ff14eb9eccfe4",
-    "https://hska-iwi-vsys.github.io/iwibot-frontend/main.69a080f6d637dae25070.js": "e696c2934f3673359b50805e0a70f730447cf14a",
+    "https://hska-iwi-vsys.github.io/iwibot-frontend/index.html": "784953cf7ed5ad652ba822c88c87a8e63fc1e23e",
+    "https://hska-iwi-vsys.github.io/iwibot-frontend/main.9b6267e2f60a919cbabe.js": "f2b6b701dc5aa48aa3fa1d2cd3daad7a0b005545",
     "https://hska-iwi-vsys.github.io/iwibot-frontend/polyfills.a19b2f1d90e9baecaab8.js": "9f0b8341c0a0caec1581da2f255eb5dbb8e12303",
     "https://hska-iwi-vsys.github.io/iwibot-frontend/runtime.a66f828dca56eeb90e02.js": "078e320cc6fdaf355836c3b1c52b059cdd33fc7e",
     "https://hska-iwi-vsys.github.io/iwibot-frontend/styles.7170448409e760270c38.css": "ead497f3b28d4698995b9fd82a40ead863828522"
