@@ -13,7 +13,7 @@ export class ConversationService {
 
   private CONVERSATION_API_URL = ConfigService.getApiEndpoint('CONVERSATION_API_URL');
   private readonly newMessagesSubject: Subject<Message>;
-  private key = "iwiBot_conversationMessages";
+  private key = 'iwiBot_conversationMessages';
 
   constructor(
     private http: HttpClient,
@@ -47,30 +47,31 @@ export class ConversationService {
           }
           this.conversation.setContext(response.context);
         }
-      ); 
+      );
   }
 
   /**
-   * Looks if there are old messages in lokalStorage. 
+   * Looks if there are old messages in localStorage.
    * If yes add them to the current conversation.
    */
   private initHistory(): void {
     if (window.localStorage) {
-      let stringMessages = localStorage.getItem(this.key);
-      if(stringMessages) {
-        try {
-          let messages = JSON.parse(stringMessages);
-          for(let message of messages) {
-            this.conversation.addMessage(new Message(
-              message.payload,
-              message.isSendMessage,
-              message.html,
-              message.lang
-              ))
-          }
-        } catch(err) {
-          localStorage.removeItem(this.key);
+      const stringMessages = localStorage.getItem(this.key);
+      if (!stringMessages) {
+        return;
+      }
+      try {
+        const messages = JSON.parse(stringMessages);
+        for (const message of messages) {
+          this.conversation.addMessage(new Message(
+            message.payload,
+            message.isSendMessage,
+            message.html,
+            message.lang
+          ));
         }
+      } catch (err) {
+        localStorage.removeItem(this.key);
       }
     }
   }
@@ -84,7 +85,7 @@ export class ConversationService {
     this.addMessageToConversation(sendMessage);
 
     const request: ConversationRequestObject = this.createConversationRequestObject(message);
-    async function setLibCredentials(loginService: LoginService, request: ConversationRequestObject, 
+    async function setLibCredentials(loginService: LoginService, request: ConversationRequestObject,
       conversationService: ConversationService) {
       try {
         if(loginService.libCredentialsAvailable()) {
@@ -96,8 +97,7 @@ export class ConversationService {
         conversationService.sendMessageToConversationService(request).subscribe((response: ConversationResponseObject) => {
           conversationService.processConversationResponse(response);
         });
-      }
-      catch(err) {
+      } catch(err) {
           console.log('Error: ', err.message);
       }
     }
@@ -122,7 +122,6 @@ export class ConversationService {
     }
 
     return requestObject;
-    
   }
 
   /**
@@ -193,7 +192,7 @@ export class ConversationService {
     if (window.localStorage) {
       localStorage.removeItem(this.key);
     }
-    this.getConversationMessages().splice(1, 
+    this.getConversationMessages().splice(1,
       this.getConversationMessages().length - 1);
 
   }
