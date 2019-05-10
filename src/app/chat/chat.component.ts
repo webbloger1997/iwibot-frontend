@@ -50,10 +50,6 @@ export class ChatComponent implements OnInit {
     if (event instanceof TouchEvent) {
       event.preventDefault();
     }
-    if (this.speechRecognizer.isRecognizing) {
-      this.stopVoiceRecognition(event);
-      return;
-    }
     this.speechSynthesis.stopSpeech();
     this.speechRecognizer.start();
     $('#chatInputField').attr('placeholder', this.chatInputFieldPlaceholderRecognizing);
