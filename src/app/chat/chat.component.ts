@@ -23,6 +23,8 @@ export interface IWindow extends Window {
 })
 export class ChatComponent implements OnInit {
 
+  public isSpeechRecognitionSupported: boolean = SpeechToTextService.isSpeechRecognitionSupported();
+  public isSpeechSynthesisSupported: boolean = TextToSpeechService.isSpeechSynthesisSupported();
   public chatInputFieldPlaceholder = 'Frag mich etwas...';
   public chatInputFieldPlaceholderRecognizing = 'Zuhören aktiv...';
   public recognizing = false;
@@ -44,10 +46,12 @@ export class ChatComponent implements OnInit {
   ngOnInit() {
   }
 
-  public startVoiceRecognition(): void {
-    if (this.recognizing) {
-      this.recognizing = false;
-      this.speechRecognizer.stop();
+  public startVoiceRecognition(event): void {
+    if (event instanceof TouchEvent) {
+      event.preventDefault();
+    }
+    if (this.speechRecognizer.isRecognizing) {
+      this.stopVoiceRecognition(event);
       return;
     }
     this.speechSynthesis.stopSpeech();
@@ -55,7 +59,18 @@ export class ChatComponent implements OnInit {
     $('#chatInputField').attr('placeholder', this.chatInputFieldPlaceholderRecognizing);
   }
 
+  public stopVoiceRecognition(event?): void {
+    if (event instanceof TouchEvent) {
+      event.preventDefault();
+    }
+    this.speechRecognizer.stop();
+    this.recognizing = false;
+  }
+
   private initRecognition(): void {
+    if (!this.isSpeechRecognitionSupported) {
+      return;
+    }
     this.speechRecognizer.onStart()
       .subscribe(data => {
         this.recognizing = true;
@@ -64,8 +79,8 @@ export class ChatComponent implements OnInit {
 
     this.speechRecognizer.onEnd()
       .subscribe(() => {
+        this.stopVoiceRecognition();
         const chatInputField = $('#chatInputField');
-        this.recognizing = false;
         this.zone.run(() => this.sendMessage(this.finalTranscript));
         this.finalTranscript = '';
         this.detectChanges();
@@ -78,7 +93,6 @@ export class ChatComponent implements OnInit {
         const message = data.content.trim();
         if (data.info === 'final_transcript' && message.length > 0) {
           this.finalTranscript = message;
-          this.speechRecognizer.stop();
           this.detectChanges();
         }
         if (data.info === 'interim_transcript' && message.length > 0) {
@@ -118,6 +132,9 @@ export class ChatComponent implements OnInit {
    * a message from the conversation service it starts the speech synthesis
    */
   private initSpeechSynthesis(): void {
+    if (!this.isSpeechSynthesisSupported) {
+      return;
+    }
     this.conversationService.getNewMessageSubject()
       .subscribe((message: Message) => {
           if (!message.getIsSendMessage()) {
@@ -155,6 +172,9 @@ export class ChatComponent implements OnInit {
     window.onresize = () => {
       this.scrollChatToBottom();
     };
+    $(() => {
+      this.scrollChatToBottom();
+    });
   }
 
   /**
