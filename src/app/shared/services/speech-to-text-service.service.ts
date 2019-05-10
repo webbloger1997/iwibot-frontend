@@ -14,11 +14,19 @@ export class SpeechToTextService {
   private ignoreOnEnd: boolean;
 
   constructor() {
-    const { webkitSpeechRecognition } = (window as any);
-    this.recognition = new webkitSpeechRecognition();
-    this.recognition.continuous = true;
-    this.recognition.interimResults = true;
-    this.recognition.lang = 'de-DE';
+    const {webkitSpeechRecognition} = (window as any);
+   if (SpeechToTextService.isSpeechRecognitionSupported()) {
+      this.recognition = new webkitSpeechRecognition();
+      this.recognition.continuous = true;
+      this.recognition.interimResults = true;
+      this.recognition.lang = 'de-DE';
+   } else {
+     console.log('Speech Recognition not supported!');
+   }
+  }
+
+  public static isSpeechRecognitionSupported(): boolean {
+    return ('webkitSpeechRecognition' in window);
   }
 
   /**
@@ -29,6 +37,7 @@ export class SpeechToTextService {
   setLanguage(language: string) {
     this.recognition.lang = language;
   }
+
   /**
    * Starts the speech recognition.
    * @returns void
@@ -50,9 +59,6 @@ export class SpeechToTextService {
   onEnd(): Observable<SpeechNotification> {
     return new Observable(observer => {
       this.recognition.onend = () => {
-        if (this.ignoreOnEnd) {
-          return;
-        }
         observer.next({
           info: 'info_start'
         });
@@ -102,6 +108,7 @@ export class SpeechToTextService {
       this.recognition.onerror = (event) => {
         let result: SpeechError;
         if (event.error === 'no-speech') {
+          this.recognition.abort();
           result = SpeechError.NO_SPEECH;
           this.ignoreOnEnd = true;
         }

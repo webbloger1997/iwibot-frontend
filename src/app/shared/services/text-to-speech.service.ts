@@ -8,11 +8,20 @@ export class TextToSpeechService {
   private englishVoice: SpeechSynthesisVoice;
 
   constructor() {
-    this.initVoices();
-    this.initSpeechSynthesis();
-    speechSynthesis.onvoiceschanged = () => {
+    if (TextToSpeechService.isSpeechSynthesisSupported()) {
       this.initVoices();
-    };
+      this.initSpeechSynthesis();
+      speechSynthesis.onvoiceschanged = () => {
+        this.initVoices();
+      };
+    } else {
+      console.log('Speech Synthesis not supported!');
+    }
+
+  }
+
+  static isSpeechSynthesisSupported(): boolean {
+    return ('speechSynthesis' in window);
   }
 
   /**
