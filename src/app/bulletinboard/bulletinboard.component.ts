@@ -10,7 +10,7 @@ import { Networkcheck } from '../shared/services/networkcheck';
 })
 export class BulletinboardComponent implements OnInit {
   newsList: NewsBulletinBoard[];
-  private key = "bulletinBoardNews";
+  private key = 'bulletinBoardNews';
 
   constructor(private newsBulletin: NewsbulletinboardService, private networkCheck: Networkcheck) {
     this.newsList = [];
@@ -24,17 +24,15 @@ export class BulletinboardComponent implements OnInit {
         networkCheck.setOnline(false);
       }
       );
-     
   }
-
   ngOnInit() {
-    if(this.newsList.length == 0) {
+    if (this.newsList.length === 0) {
       if (window.localStorage) {
-        let news = localStorage.getItem(this.key);
-        if(news) {
+        const news = localStorage.getItem(this.key);
+        if (news) {
           try {
             this.newsList = JSON.parse(news);
-          } catch(err) {
+          } catch (err) {
             localStorage.removeItem(this.key);
           }
         }
